@@ -19,26 +19,22 @@ st.header("Gemini GPT")
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-input = st.text_input("Input:", key="input")
-submit = st.button("Ask the question")
-new_chat = st.button("New Chat")
+form = st.form(key='chat_form')
+input_message = form.text_input(label='You:', key='input')
 
-if submit and input:
-    response = get_gemini_response(input)
-    st.session_state.chat_history.append({"question": input, "response": response})
-
-if new_chat:
-    st.session_state.chat_history = []
+if form.form_submit_button(label='Send') and input_message:
+    response = get_gemini_response(input_message)
+    st.session_state.chat_history.append({"question": input_message, "response": response})
 
 if st.session_state.chat_history:
     with st.expander("Chat History"):
         for chat in st.session_state.chat_history:
-            st.write(f"**Q:** {chat['question']}")
-            st.write(f"**A:** {chat['response']}")
+            st.write(f"**You:** {chat['question']}")
+            st.write(f"**Gemini GPT:** {chat['response']}")
             st.write("---")
 
 if st.session_state.chat_history:
     st.subheader("Current Chat")
-    st.write(f"**Q:** {st.session_state.chat_history[-1]['question']}")
-    st.write(f"**A:** {st.session_state.chat_history[-1]['response']}")
+    st.write(f"**You:** {st.session_state.chat_history[-1]['question']}")
+    st.write(f"**Gemini GPT:** {st.session_state.chat_history[-1]['response']}")
     st.write("---")
